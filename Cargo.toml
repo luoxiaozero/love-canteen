@@ -12,3 +12,6 @@ edition = "2021"
 members = [
     "front-leptos"
 ]
+exclude = [
+    "back-juri",
+]
