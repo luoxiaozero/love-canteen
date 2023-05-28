@@ -1,4 +1,5 @@
 use leptos::*;
+use crate::components::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct CuisineMenuModel {
@@ -69,5 +70,6 @@ pub fn Menu(cx: Scope) -> impl IntoView {
                 />
             </main>
         </div>
+        <BottomNav />
     }
 }

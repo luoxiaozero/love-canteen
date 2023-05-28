@@ -1,8 +1,9 @@
 mod app;
+mod components;
 mod pages;
 
-use leptos::*;
 use app::*;
+use leptos::*;
 
 fn main() {
     mount_to_body(|cx| view! { cx, <App/> });
