@@ -1,6 +1,7 @@
 mod app;
 mod components;
 mod pages;
+mod api;
 
 use app::*;
 use leptos::*;
