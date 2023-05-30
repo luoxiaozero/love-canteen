@@ -12,6 +12,6 @@ async fn main() {
     
     router.router(user::router());
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 7878));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 8520));
     juri::Server::bind(addr).server(router).await.unwrap();
 }
