@@ -9,6 +9,6 @@ edition = "2021"
 leptos = { version = "0.3.0", features = ["stable"] }
 leptos_router = { version = "0.3.0", features = ["csr"] }
 leptos_icons = { version = "0.0.12", features = ["AiUserOutlined", "AiBarsOutlined", "AiGroupOutlined"]}
-melt-ui = { git = "https://github.com/luoxiaozero/melt-ui.git", rev = "25e3b81" }
+melt-ui = { git = "https://github.com/luoxiaozero/melt-ui.git", rev = "f240560" }
 serde = "1.0.163"
 gloo-net = "0.2.6"
