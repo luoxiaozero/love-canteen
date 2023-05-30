@@ -1,5 +1,5 @@
 use super::net::post;
-use leptos::*;
+use leptos::spawn_local;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, PartialEq, Clone)]
@@ -10,20 +10,23 @@ pub struct LoginData {
 
 #[derive(Deserialize, Serialize)]
 pub struct LoginResource {
-    token: String,
+    pub token: String,
 }
 
 pub fn login_api(
-    cx: Scope,
-    source: impl Fn() -> LoginData + 'static,
-) -> Resource<LoginData, Result<LoginResource, String>> {
-    create_resource(cx, source, |data| async move {
+    data: LoginData,
+    callback: impl Fn(Result<LoginResource, String>) -> () + 'static,
+) {
+    spawn_local(async move {
         let res = post::<LoginResource>("/api/user/login", &data).await;
-        if res.code == 2000 {
-            res.data
-                .map_or(Err(String::from("Return LoginResource error")), |v| Ok(v))
-        } else {
-            Err(res.reason)
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
         }
-    })
+        let Some(data) = res.data else {
+            callback(Err(String::from("Return LoginResource error")));
+            return;
+        };
+        callback(Ok(data));
+    });
 }

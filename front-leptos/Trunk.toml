@@ -8,5 +8,4 @@ open = true
 
 
 [[proxy]]
-rewrite = "/api"
-backend = "http://127.0.0.1:8520"
+backend = "http://127.0.0.1:8520/api/"
