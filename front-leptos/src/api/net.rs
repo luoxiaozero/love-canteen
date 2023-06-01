@@ -1,5 +1,6 @@
 use gloo_net::http::Request;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use crate::store::Token;
 
 #[derive(Deserialize)]
 pub struct ResultResponse<T> {
@@ -15,7 +16,11 @@ async fn post_basic<T>(
 where
     T: DeserializeOwned,
 {
-    let request = Request::post(url).json(data)?;
+    let mut request = Request::post(url);
+    if let Some(token) = Token::get() {
+        request = request.header("token", &token);
+    }
+    request = request.json(data)?;
     let response = request.send().await?;
 
     let status = response.status();

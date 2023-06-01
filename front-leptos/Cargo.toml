@@ -12,3 +12,4 @@ leptos_icons = { version = "0.0.12", features = ["AiUserOutlined", "AiBarsOutlin
 melt-ui = { git = "https://github.com/luoxiaozero/melt-ui.git", rev = "f240560" }
 serde = "1.0.163"
 gloo-net = "0.2.6"
+gloo-storage = "0.2.2"

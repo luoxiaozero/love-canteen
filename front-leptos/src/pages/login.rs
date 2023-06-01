@@ -1,4 +1,5 @@
 use crate::api::login::*;
+use crate::store::*;
 use leptos::*;
 use leptos_router::use_navigate;
 use melt_ui::*;
@@ -24,8 +25,9 @@ pub fn Login(cx: Scope) -> impl IntoView {
         login_api(LoginData { account, password }, move |v| {
             log!("login s");
             match v {
-                Ok(_data) => {
+                Ok(data) => {
                     let navigate = use_navigate(cx);
+                    Token::set(data.token);
                     _ = navigate("/", Default::default());
                 }
                 Err(err) => {
