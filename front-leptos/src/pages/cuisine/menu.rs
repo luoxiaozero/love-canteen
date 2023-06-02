@@ -1,11 +1,7 @@
 use leptos::*;
-use crate::components::*;
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct CuisineMenuModel {
-    id: u32,
-    name: String
-}
+use crate::{components::*, model::ShopMenuModel, api::shop};
+use melt_ui::*;
+use crate::api::shop::*;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SimpleCuisineModel {
@@ -15,11 +11,11 @@ pub struct SimpleCuisineModel {
 }
 
 #[component]
-pub fn Menu(cx: Scope) -> impl IntoView {
+pub fn ShopMenu(cx: Scope) -> impl IntoView {
     let selected_menu_id = create_rw_signal::<u32>(cx, 1);
-    let (menu_list, set_menu_list) = create_signal::<Vec<CuisineMenuModel>>(cx, vec![
-        CuisineMenuModel {
-            id: 1,
+    let menu_list = create_rw_signal::<Vec<ShopMenuModel>>(cx, vec![
+        ShopMenuModel {
+            id: 0,
             name: "水果".to_string()
         }
     ]);
@@ -35,9 +31,35 @@ pub fn Menu(cx: Scope) -> impl IntoView {
             image_url: "".to_string()
         }
     ]);
+    let is_show_new_menu = create_rw_signal(cx, false);
+    let on_cancel = SignalSetter::map(cx, move |_| {
+        is_show_new_menu.set(false);
+    });
+
+    let new_menu_title = create_rw_signal(cx, String::new());
+    let open_new_menu_modal = move |_| {
+        is_show_new_menu.set(true);
+        new_menu_title.set(String::new());
+    };
+
+    let new_menu = move |_| {
+        new_shop_menu_api(NewShopMenu { title: new_menu_title.get_untracked() }, move |shop_menu| {
+            if let Ok(shop_menu) = shop_menu {
+                menu_list.update(|value| {
+                    value.push(shop_menu);
+                });
+                
+            }
+            is_show_new_menu.set(false);
+        });
+    };
+
     view! { cx,
         <div class="flex h-screen">
             <div style="background: #f2f2f2" class="w-100px">
+                <div class="text-center px-6px py-12px cursor-pointer" on:click=open_new_menu_modal>
+                    "+"
+                </div>
                 <For 
                     each=move || menu_list.get() 
                     key=|menu_item| menu_item.id 
@@ -71,5 +93,11 @@ pub fn Menu(cx: Scope) -> impl IntoView {
             </main>
         </div>
         <BottomNav />
+        <Modal open=is_show_new_menu on_cancel title="新建菜单">
+            <Input value=new_menu_title/>
+            <Button on:click=new_menu>
+                "添加"
+            </Button>
+        </Modal>
     }
 }

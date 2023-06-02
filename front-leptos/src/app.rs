@@ -8,7 +8,7 @@ pub fn App(cx: Scope) -> impl IntoView {
         <Router>
             <Routes base="/cuisine".to_string() >
                 <Route path="/menu" view=move |cx| view! { cx,
-                    <Menu />
+                    <ShopMenu />
                 }/>
                 <Route path="/input" view=move |cx| view! { cx,
                     "录入菜品"
