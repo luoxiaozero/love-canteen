@@ -21,7 +21,7 @@ pub fn login(request: &Request) -> juri::Result<Response> {
 
     let conn = &mut get_mysql_connection();
 
-    let login_user = user::table
+    let login_user: User = user::table
         .filter(user::account.eq(account))
         .first::<User>(conn)
         .ok_or_status_4001()?;

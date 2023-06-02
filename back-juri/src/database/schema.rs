@@ -19,7 +19,7 @@ diesel::table! {
     shop_menu (id) {
         id-> Integer,
         shop_id-> Integer,
-        title: String,
+        title -> Varchar,
         create_time-> Datetime,
     }
 }
@@ -52,8 +52,8 @@ diesel::table! {
         status -> Varchar,
         reason -> Text,
         remark -> Text,
-        reserve_start_time: Datetime,
-        reserve_end_time: Datetime,
+        reserve_start_time -> Datetime,
+        reserve_end_time -> Datetime,
         create_time-> Datetime,
     }
 }
