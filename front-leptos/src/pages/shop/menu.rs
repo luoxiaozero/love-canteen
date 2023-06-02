@@ -36,9 +36,6 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         ],
     );
     let is_show_new_menu = create_rw_signal(cx, false);
-    let on_cancel = SignalSetter::map(cx, move |_| {
-        is_show_new_menu.set(false);
-    });
 
     let new_menu_title = create_rw_signal(cx, String::new());
     let open_new_menu_modal = move |_| {
@@ -101,7 +98,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
             </main>
         </div>
         <BottomNav />
-        <Modal open=is_show_new_menu on_cancel title="新建菜单">
+        <Modal show=is_show_new_menu title="新建菜单">
             <Input value=new_menu_title/>
             <Button on:click=new_menu>
                 "添加"
