@@ -1,7 +1,22 @@
+use super::super::net::{get, post};
 use crate::model::ShopMenuModel;
-use super::super::net::post;
 use leptos::spawn_local;
 use serde::{Deserialize, Serialize};
+
+pub fn get_shop_menu_api(callback: impl Fn(Result<Vec<ShopMenuModel>, String>) -> () + 'static) {
+    spawn_local(async move {
+        let res = get::<_, Vec<_>, String>("/api/shop/menu", None).await;
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
+        }
+        let Some(data) = res.data else {
+            callback(Err(String::from("Return ShopMenu error")));
+            return;
+        };
+        callback(Ok(data));
+    });
+}
 
 #[derive(Deserialize, Serialize, PartialEq, Clone)]
 pub struct NewShopMenu {
