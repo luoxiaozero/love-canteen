@@ -1,42 +1,33 @@
-use crate::api::shop::*;
-use crate::{api::shop, components::*, model::ShopMenuModel};
+use crate::{
+    api::shop::*,
+    components::*,
+    model::{FoodModel, ShopMenuModel},
+};
 use leptos::*;
+use leptos_router::use_navigate;
 use melt_ui::*;
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct SimpleCuisineModel {
-    id: u32,
-    name: String,
-    image_url: String,
-}
 
 #[component]
 pub fn ShopMenu(cx: Scope) -> impl IntoView {
-    let selected_menu_id = create_rw_signal::<u32>(cx, 1);
+    let selected_menu_id = create_rw_signal::<i32>(cx, 1);
     let menu_list = create_rw_signal::<Vec<ShopMenuModel>>(cx, vec![]);
-
     get_shop_menu_api(move |list| {
         if let Ok(list) = list {
             menu_list.set(list);
         }
     });
-    let (cuisine_list, set_cuisine_list) = create_signal::<Vec<SimpleCuisineModel>>(
-        cx,
-        vec![
-            SimpleCuisineModel {
-                id: 1,
-                name: "苹果".to_string(),
-                image_url: "".to_string(),
-            },
-            SimpleCuisineModel {
-                id: 2,
-                name: "香蕉".to_string(),
-                image_url: "".to_string(),
-            },
-        ],
-    );
-    let is_show_new_menu = create_rw_signal(cx, false);
 
+    let food_vec = create_rw_signal::<Vec<FoodModel>>(cx, vec![]);
+    create_effect(cx, move |_| {
+        let menu_id = selected_menu_id.get();
+        get_food_vec_api(menu_id, move |food_vec_data| {
+            if let Ok(food_vec_data) = food_vec_data {
+                food_vec.set(food_vec_data);
+            }
+        });
+    });
+
+    let is_show_new_menu = create_rw_signal(cx, false);
     let new_menu_title = create_rw_signal(cx, String::new());
     let open_new_menu_modal = move |_| {
         is_show_new_menu.set(true);
@@ -56,6 +47,14 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                 }
                 is_show_new_menu.set(false);
             },
+        );
+    };
+
+    let new_food = move |_| {
+        let navigate = use_navigate(cx);
+        _ = navigate(
+            &format!("/shop/food/add?menu_id={}", selected_menu_id.get()),
+            Default::default(),
         );
     };
 
@@ -80,16 +79,19 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                 />
             </div>
             <main class="flex-1">
+                <Button on:click=new_food>
+                    "+"
+                </Button>
                 <For
-                    each=move || cuisine_list.get()
-                    key=|cuisine| cuisine.id
-                    view=move |cx, cuisine| {
+                    each=move || food_vec.get()
+                    key=|food| food.id
+                    view=move |cx, food| {
                         view! { cx,
                             <div class="p-12px flex">
                                 <div class="w-60px">
                                 </div>
                                 <div class="flex-1">
-                                    <div>{cuisine.name}</div>
+                                    <div>{food.title}</div>
                                 </div>
                             </div>
                         }

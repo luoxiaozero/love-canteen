@@ -10,7 +10,7 @@ pub fn Home(cx: Scope) -> impl IntoView {
         let path = if Token::get().is_none() {
             "login"
         } else {
-            "/cuisine/menu"
+            "/shop/menu"
         };
         _ = navigate(path, Default::default());
     });

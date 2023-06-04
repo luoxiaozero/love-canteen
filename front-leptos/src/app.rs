@@ -6,14 +6,14 @@ use leptos_router::*;
 pub fn App(cx: Scope) -> impl IntoView {
     view! { cx,
         <Router>
-            <Routes base="/cuisine".to_string() >
+            <Routes base="/shop".to_string() >
                 <Route path="/menu" view=move |cx| view! { cx,
                     <ShopMenu />
                 }/>
-                <Route path="/input" view=move |cx| view! { cx,
-                    "录入菜品"
+                <Route path="/food/add" view=move |cx| view! { cx,
+                    <AddFood />
                 }/>
-                <Route path="/detail" view=move |cx| view! { cx,
+                <Route path="/food" view=move |cx| view! { cx,
                     "菜品详情"
                 }/>
             </Routes>

@@ -49,6 +49,7 @@ pub fn get_menu_food(request: &Request) -> juri::Result<Response> {
             json!({
                 "id": food.id,
                 "title": food.title,
+                "value": food.value
             })
         })
         .collect();
