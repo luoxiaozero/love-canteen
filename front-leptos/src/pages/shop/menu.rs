@@ -92,6 +92,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                                 </div>
                                 <div class="flex-1">
                                     <div>{food.title}</div>
+                                    <div>{food.value}</div>
                                 </div>
                             </div>
                         }

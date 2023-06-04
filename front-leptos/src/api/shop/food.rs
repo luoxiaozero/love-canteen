@@ -9,7 +9,7 @@ pub fn get_food_vec_api(
 ) {
     spawn_local(async move {
         let query = [("menu_id", menu_id.to_string())].to_vec();
-        let res = get::<_, Vec<_>, String>("/api/shop/food", Some(query)).await;
+        let res = get::<_, Vec<_>, String>("/api/shop/menu/food", Some(query)).await;
         if res.code != 2000 {
             callback(Err(res.reason));
             return;
@@ -24,6 +24,7 @@ pub fn get_food_vec_api(
 
 #[derive(Deserialize, Serialize, PartialEq, Clone)]
 pub struct NewFood {
+    pub menu_id_vec: Vec<i32>,
     pub title: String,
     pub value: String,
 }
