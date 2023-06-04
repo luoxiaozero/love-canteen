@@ -33,6 +33,13 @@ pub struct NewShopMenu {
     pub title: String,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = super::schema::shop_menu_link_food)]
+pub struct NewShopMenuLinkFood {
+    pub menu_id: i32,
+    pub food_id: i32,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::shop_menu_link_food)]
 pub struct ShopMenuLinkFood {
@@ -42,10 +49,21 @@ pub struct ShopMenuLinkFood {
     pub create_time: chrono::NaiveDateTime,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = super::schema::food)]
+pub struct NewFood {
+    pub user_id: i32,
+    pub title: String,
+    pub ingredient: String,
+    pub method: String,
+    pub value: String,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::food)]
 pub struct Food {
     pub id: i32,
+    pub user_id: i32,
     pub title: String,
     pub ingredient: String,
     pub method: String,

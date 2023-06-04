@@ -33,9 +33,16 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(shop_menu_link_food -> food (food_id));
+diesel::allow_tables_to_appear_in_same_query!(
+    food,
+    shop_menu_link_food,
+);
+
 diesel::table! {
     food (id) {
         id-> Integer,
+        user_id -> Integer,
         title -> Varchar,
         ingredient -> Text,
         method -> Text,

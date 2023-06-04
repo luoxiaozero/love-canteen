@@ -61,7 +61,7 @@ pub fn add_menu(request: &Request) -> juri::Result<Response> {
     diesel::insert_into(shop_menu::table)
         .values(&new_menu)
         .execute(conn)
-        .unwrap();
+        .ok_or_status_4001()?;
     let menu: ShopMenu = shop_menu::table
         .order(shop_menu::id.desc())
         .first(conn)
