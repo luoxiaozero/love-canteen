@@ -23,7 +23,6 @@ pub fn Login(cx: Scope) -> impl IntoView {
             return;
         }
         login_api(LoginData { account, password }, move |v| {
-            log!("login s");
             match v {
                 Ok(data) => {
                     let navigate = use_navigate(cx);

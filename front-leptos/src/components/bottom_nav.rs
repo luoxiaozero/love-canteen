@@ -20,7 +20,7 @@ pub fn BottomNav(cx: Scope) -> impl IntoView {
     });
     view! {cx,
         <Tabbar selected>
-            <TabbarItem name="/cuisine/menu" icon=AiIcon::AiBarsOutlined>
+            <TabbarItem name="/shop/menu" icon=AiIcon::AiBarsOutlined>
                 "菜单"
             </TabbarItem>
             <TabbarItem name="/order" icon=AiIcon::AiGroupOutlined>
