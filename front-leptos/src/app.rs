@@ -1,9 +1,10 @@
-use crate::pages::*;
+use crate::{components::provide_shop_cart, pages::*};
 use leptos::*;
 use leptos_router::*;
 
 #[component]
 pub fn App(cx: Scope) -> impl IntoView {
+    provide_shop_cart(cx);
     view! { cx,
         <Router>
             <Routes base="/shop".to_string() >

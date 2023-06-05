@@ -9,6 +9,7 @@ use melt_ui::*;
 
 #[component]
 pub fn ShopMenu(cx: Scope) -> impl IntoView {
+    let cart = use_shop_cart(cx);
     let selected_menu_id = create_rw_signal::<i32>(cx, 1);
     let menu_list = create_rw_signal::<Vec<ShopMenuModel>>(cx, vec![]);
     get_shop_menu_api(move |list| {
@@ -58,6 +59,16 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         );
     };
 
+    let food_to_cart = move |food_id| {
+        food_vec.update_untracked(|food_vec| {
+            for food in food_vec.iter() {
+                if food.id == food_id {
+                    food_to_shop_cart(cart, food.clone());
+                }
+            }
+        });
+    };
+
     view! { cx,
         <div class="flex h-screen">
             <div style="background: #f2f2f2" class="w-100px">
@@ -86,6 +97,10 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                     each=move || food_vec.get()
                     key=|food| food.id
                     view=move |cx, food| {
+                        let food_id = food.id;
+                        let add = move |_| {
+                            food_to_cart(food_id);
+                        };
                         view! { cx,
                             <div class="p-12px flex">
                                 <div class="w-60px">
@@ -93,6 +108,11 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                                 <div class="flex-1">
                                     <div>{food.title}</div>
                                     <div>{food.value}</div>
+                                    <div>
+                                        <Button on:click=add>
+                                            "加入购物车"
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -100,6 +120,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                 />
             </main>
         </div>
+        <ShopCart />
         <BottomNav />
         <Modal show=is_show_new_menu title="新建菜单">
             <Input value=new_menu_title/>
