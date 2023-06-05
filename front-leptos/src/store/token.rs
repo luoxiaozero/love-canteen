@@ -13,6 +13,10 @@ impl Token {
     }
 
     pub fn set(token: String) {
-        _ = LocalStorage::set(TOKEN, token);
+        if token.is_empty() {
+            LocalStorage::delete(TOKEN)
+        } else {
+            _ = LocalStorage::set(TOKEN, token);
+        }
     }
 }

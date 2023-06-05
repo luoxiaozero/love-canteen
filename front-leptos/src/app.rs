@@ -15,7 +15,7 @@ pub fn App(cx: Scope) -> impl IntoView {
                     <AddFood />
                 }/>
                 <Route path="/food" view=move |cx| view! { cx,
-                    "菜品详情"
+                    <Food />
                 }/>
             </Routes>
             <Routes>
