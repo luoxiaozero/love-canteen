@@ -1,6 +1,7 @@
 mod food;
 mod menu;
 
+use crate::utils::ext::OptionResponseExt;
 use crate::utils::user::get_user_info;
 use crate::{
     database::{
@@ -18,6 +19,7 @@ use serde_json::{json, Value};
 pub fn router() -> Router {
     let mut router = Router::new();
     router.at("/shop").get(get_shop_vec);
+    router.at("/shop/self").get(is_self_shop);
     router.at("/shop/exist").get(is_exist_shop);
     router.at("/shop/create").post(create_shop);
     router.at("/shop/menu").get(menu::get_menu);
@@ -44,6 +46,30 @@ pub fn get_shop_vec(request: &Request) -> juri::Result<Response> {
         .collect();
     let data = json!(shop_vec_json);
     Ok(result_response::success_data("获取成功", &data)?)
+}
+
+#[handler]
+pub fn is_self_shop(request: &Request) -> juri::Result<Response> {
+    let user = get_user_info(request.header("token"))?;
+    let shop_id = request
+        .query("shop_id")
+        .ok_or_status_4001()?
+        .parse::<i32>()
+        .ok_or_status_4001()?;
+
+    let conn = &mut get_mysql_connection();
+    let shop_vec: Vec<Shop> = shop::table
+        .filter(shop::user_id.eq(user.id))
+        .filter(shop::id.eq(shop_id))
+        .limit(1)
+        .load(conn)
+        .ok_or_status_4001()?;
+
+    if shop_vec.is_empty() {
+        return Ok(result_response::success_data("获取成功", &false)?);
+    }
+
+    Ok(result_response::success_data("获取成功", &true)?)
 }
 
 #[handler]
