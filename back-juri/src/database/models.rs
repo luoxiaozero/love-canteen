@@ -17,6 +17,12 @@ pub struct Shop {
     pub create_time: chrono::NaiveDateTime,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = super::schema::shop)]
+pub struct NewShop {
+    pub user_id: i32,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::shop_menu)]
 pub struct ShopMenu {
