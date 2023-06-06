@@ -20,6 +20,7 @@ pub fn router() -> Router {
     router.at("/shop").get(get_shop_vec);
     router.at("/shop/exist").get(is_exist_shop);
     router.at("/shop/create").post(create_shop);
+    router.at("/shop/menu").get(menu::get_menu);
     router.at("/shop/menu/add").post(menu::add_menu);
     router.at("/shop/menu/food").get(food::get_menu_food);
     router.at("/shop/food/add").post(food::add_food);
