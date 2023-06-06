@@ -8,11 +8,13 @@ pub fn Home(cx: Scope) -> impl IntoView {
 
     request_animation_frame(move || {
         let path = if Token::get().is_none() {
-            "login"
+            "login".to_string()
+        } else if let Some(shop_id) = DefaultShopId::get() {
+            format!("/shop/menu?shop_id={shop_id}")
         } else {
-            "/shop/menu"
+            "/shop".to_string()
         };
-        _ = navigate(path, Default::default());
+        _ = navigate(&path, Default::default());
     });
 
     view! { cx,

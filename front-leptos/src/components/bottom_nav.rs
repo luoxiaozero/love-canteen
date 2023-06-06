@@ -2,6 +2,7 @@ use leptos::*;
 use leptos_router::{use_navigate, use_location};
 use melt_ui::mobile::*;
 use leptos_icons::*;
+use crate::store::DefaultShopId;
 
 #[component]
 pub fn BottomNav(cx: Scope) -> impl IntoView {
@@ -15,6 +16,15 @@ pub fn BottomNav(cx: Scope) -> impl IntoView {
         if path.is_empty() {
             selected.set(pathname);
         } else if path != pathname {
+            let path = if path == "/shop/menu" {
+                if let Some(shop_id) = DefaultShopId::get() {
+                    format!("/shop/menu?shop_id={shop_id}")
+                } else {
+                    "/shop".to_string()
+                }
+            } else {
+                path.to_string()
+            };
             _ = navigate(&path, Default::default());
         }
     });

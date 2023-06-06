@@ -8,6 +8,9 @@ pub fn App(cx: Scope) -> impl IntoView {
     view! { cx,
         <Router>
             <Routes base="/shop".to_string() >
+                <Route path="" view=move |cx| view! { cx,
+                    <ShopVec />
+                }/>
                 <Route path="/menu" view=move |cx| view! { cx,
                     <ShopMenu />
                 }/>
