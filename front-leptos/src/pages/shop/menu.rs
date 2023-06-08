@@ -85,7 +85,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
 
     view! { cx,
         <TopNav back_path="/shop" title="店铺" right_text=right_text click_right=right_text_click />
-        <div class="flex h-screen" style="padding: 46px 0 50px" >
+        <div class="flex h-screen box-border" style="padding: 46px 0 50px" >
             <div style="background: #f2f2f2" class="w-100px">
                 {
                     move || {
@@ -117,7 +117,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                     move || {
                         if is_self_shop.get() {
                             view! {cx,
-                                <Button on:click=new_food>
+                                <Button on:click=new_food style="width: calc(100% - 32px); margin: 8px 16px;">
                                     "+"
                                 </Button>
                             }.into()
