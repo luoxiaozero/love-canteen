@@ -25,7 +25,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         }
     });
     let default_shop_id = create_rw_signal(cx, DefaultShopId::get());
-    let right_text = create_rw_signal(cx, String::new());
+    let right_text = create_rw_signal(cx, "");
     create_effect(cx, move |_| {
         let text = if let Some(default_shop_id) = default_shop_id.get() {
             if default_shop_id == shop_id {
@@ -36,11 +36,11 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         } else {
             "设置为默认"
         };
-        right_text.set(text.to_string());
+        right_text.set(text);
     });
     let right_text_click = SignalSetter::map(cx, move |_| {
         let right_text = right_text.get();
-        if right_text.is_empty() || right_text == "已默认".to_string() {
+        if right_text.is_empty() || right_text == "已默认" {
             return;
         }
         DefaultShopId::set(shop_id);

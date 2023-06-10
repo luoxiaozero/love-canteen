@@ -6,8 +6,8 @@ use melt_ui::mobile::*;
 pub fn TopNav(
     cx: Scope,
     #[prop(into)] back_path: String,
-    #[prop(optional, into)] title: MaybeSignal<String>,
-    #[prop(optional, into)] right_text: MaybeSignal<String>,
+    #[prop(optional, into)] title: MaybeSignal<&'static str>,
+    #[prop(optional, into)] right_text: MaybeSignal<&'static str>,
     #[prop(optional, into)] click_right: Option<SignalSetter<MouseEvent>>,
 ) -> impl IntoView {
     let click_left = SignalSetter::map(cx, move |_| {
