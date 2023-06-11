@@ -83,7 +83,7 @@ pub fn get_order(request: &Request) -> juri::Result<Response> {
                 "id": order.id,
                 "shop_id": order.shop_id,
                 "status": order.status,
-                "create": order.create_time.format("%Y-%m-%d %H:%M:%S").to_string()
+                "create_time": order.create_time.format("%Y-%m-%d %H:%M:%S").to_string()
             })
         })
         .collect();

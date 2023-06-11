@@ -11,10 +11,17 @@ pub struct ShopMenuModel {
     pub title: String,
 }
 
-
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct FoodModel {
     pub id: i32,
     pub title: String,
     pub value: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+pub struct SimpleOrderModel {
+    pub id: i32,
+    pub shop_id: i32,
+    pub status: String,
+    pub create_time: String,
 }

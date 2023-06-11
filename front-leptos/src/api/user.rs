@@ -1,4 +1,6 @@
-use super::net::post;
+use crate::model::SimpleOrderModel;
+
+use super::net::{get, post};
 use leptos::spawn_local;
 use serde::{Deserialize, Serialize};
 
@@ -24,5 +26,20 @@ pub fn new_shop_order_api(data: NewOrder, callback: impl Fn(Result<(), String>) 
             return;
         }
         callback(Ok(()));
+    });
+}
+
+pub fn get_order_api(callback: impl Fn(Result<Vec<SimpleOrderModel>, String>) -> () + 'static) {
+    spawn_local(async move {
+        let res = get::<_, Vec<_>, String>("/api/user/order", None).await;
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
+        }
+        let Some(data) = res.data else {
+            callback(Err(String::from("Return ShopMenu error")));
+            return;
+        };
+        callback(Ok(data));
     });
 }
