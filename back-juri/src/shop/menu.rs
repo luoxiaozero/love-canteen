@@ -16,11 +16,12 @@ use serde_json::{json, Value};
 
 #[handler]
 pub fn get_menu(request: &Request) -> juri::Result<Response> {
-    let user = get_user_info(request.header("token"))?;
+    let _ = get_user_info(request.header("token"))?;
+    let shop_id = request.query("shop_id").ok_or_status_4001()?.parse::<i32>().ok_or_status_4001()?;
 
     let conn = &mut get_mysql_connection();
     let shop: Shop = shop::table
-        .filter(shop::user_id.eq(user.id))
+        .filter(shop::id.eq(shop_id))
         .first(conn)
         .ok_or_status_4001()?;
 
