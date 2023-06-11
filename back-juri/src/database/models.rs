@@ -77,6 +77,18 @@ pub struct Food {
     pub create_time: chrono::NaiveDateTime,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = super::schema::order)]
+pub struct NewOrder {
+    pub user_id: i32,
+    pub shop_id: i32,
+    pub status: String,
+    pub reason: String,
+    pub remark: String,
+    pub reserve_start_time: chrono::NaiveDateTime,
+    pub reserve_end_time: chrono::NaiveDateTime,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::order)]
 pub struct Order {
@@ -91,10 +103,21 @@ pub struct Order {
     pub create_time: chrono::NaiveDateTime,
 }
 
+#[derive(Insertable)]
+#[diesel(table_name = super::schema::order_food)]
+pub struct NewOrderFood {
+    pub order_id: i32,
+    pub food_id: i32,
+    pub food_title: String,
+    pub food_value: String,
+    pub count: i32,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::order_food)]
 pub struct OrderFood {
     pub id: i32,
+    pub order_id: i32,
     pub food_id: i32,
     pub food_title: String,
     pub food_value: String,
