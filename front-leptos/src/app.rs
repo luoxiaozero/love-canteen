@@ -28,6 +28,9 @@ pub fn App(cx: Scope) -> impl IntoView {
                 <Route path="/order" view=move |cx| view! { cx,
                     <Order />
                 }/>
+                <Route path="/order/detail" view=move |cx| view! { cx,
+                    <OrderDetail />
+                }/>
                 <Route path="/me" view=move |cx| view! { cx,
                     <Me />
                 }/>

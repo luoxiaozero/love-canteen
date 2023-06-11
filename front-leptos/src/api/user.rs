@@ -1,6 +1,5 @@
-use crate::model::SimpleOrderModel;
-
 use super::net::{get, post};
+use crate::model::{OrderModel, SimpleOrderModel};
 use leptos::spawn_local;
 use serde::{Deserialize, Serialize};
 
@@ -37,7 +36,23 @@ pub fn get_order_api(callback: impl Fn(Result<Vec<SimpleOrderModel>, String>) ->
             return;
         }
         let Some(data) = res.data else {
-            callback(Err(String::from("Return ShopMenu error")));
+            callback(Err(String::from("Return SimpleOrderModel error")));
+            return;
+        };
+        callback(Ok(data));
+    });
+}
+
+pub fn get_order_detail_api(order_id: i32, callback: impl Fn(Result<OrderModel, String>) -> () + 'static) {
+    spawn_local(async move {
+        let query = [("order_id", order_id.to_string())].to_vec();
+        let res = get::<_, Vec<_>, String>("/api/user/order/detail", Some(query)).await;
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
+        }
+        let Some(data) = res.data else {
+            callback(Err(String::from("Return OrderModel error")));
             return;
         };
         callback(Ok(data));

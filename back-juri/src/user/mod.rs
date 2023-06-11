@@ -8,5 +8,6 @@ pub fn router() -> Router {
     router.at("/user/login").post(login::login);
     router.at("/user/order").get(order::get_order);
     router.at("/user/order/add").post(order::add_order);
+    router.at("/user/order/detail").get(order::get_order_detail);
     router
 }
