@@ -142,11 +142,19 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
                                 <div class="flex-1">
                                     <div>{food.title}</div>
                                     <div>{food.value}</div>
-                                    <div>
-                                        <Button on:click=add>
-                                            "加入购物车"
-                                        </Button>
-                                    </div>
+                                    {
+                                        move || if is_self_shop.get() {
+                                            None
+                                        } else {
+                                            view! {cx,
+                                                <div>
+                                                    <Button on:click=add>
+                                                        "加入购物车"
+                                                    </Button>
+                                                </div>
+                                            }.into()
+                                        }
+                                    }
                                 </div>
                             </div>
                         }
