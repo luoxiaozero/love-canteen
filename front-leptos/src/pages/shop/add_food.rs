@@ -29,7 +29,7 @@ pub fn AddFood(cx: Scope) -> impl IntoView {
     };
     view! {cx,
         <div>
-            <TopNav back_path="/shop/menu" title="新建食物"/>
+            <TopNav title="新建食物"/>
             <div class="p-2" style="padding-top: 54px">
                 <div>
                     "名字："

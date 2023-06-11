@@ -5,14 +5,18 @@ use melt_ui::mobile::*;
 #[component]
 pub fn TopNav(
     cx: Scope,
-    #[prop(into)] back_path: String,
+    #[prop(optional, into)] back_path: Option<&'static str>,
     #[prop(optional, into)] title: MaybeSignal<&'static str>,
     #[prop(optional, into)] right_text: MaybeSignal<&'static str>,
     #[prop(optional, into)] click_right: Option<SignalSetter<MouseEvent>>,
 ) -> impl IntoView {
     let click_left = SignalSetter::map(cx, move |_| {
         let navigate = use_navigate(cx);
-        _ = navigate(&back_path, Default::default());
+        if let Some(back_path) = back_path {
+            _ = navigate(&back_path, Default::default());
+        } else {
+            _ = window().history().unwrap().back();
+        }
     });
     let onclick_right = SignalSetter::map(cx, move |ev| {
         if let Some(click_right) = click_right {
