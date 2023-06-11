@@ -1,4 +1,5 @@
 use crate::api::login::*;
+use crate::components::use_shop_cart;
 use crate::store::*;
 use leptos::*;
 use leptos_router::use_navigate;
@@ -34,6 +35,8 @@ pub fn Login(cx: Scope) -> impl IntoView {
                 Ok(data) => {
                     let navigate = use_navigate(cx);
                     Token::set(data.token);
+                    let cart = use_shop_cart(cx);
+                    cart.set(vec![]);
                     _ = navigate("/", Default::default());
                 }
                 Err(err) => {

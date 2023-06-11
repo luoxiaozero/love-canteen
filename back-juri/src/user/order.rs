@@ -5,7 +5,7 @@ use crate::{
         schema::{order, order_food},
     },
     utils::{
-        ext::{OptionResponseExt, ResulResponseExt},
+        ext::{AsValueExt, OptionResponseExt, ResulResponseExt},
         order::OrderStatus,
         result_response,
         user::get_user_info,
@@ -20,13 +20,9 @@ use serde_json::{json, Value};
 pub fn add_order(request: &Request) -> juri::Result<Response> {
     let user = get_user_info(request.header("token"))?;
     let body_json = request.json_value().ok_or_status_4001()?;
-    let shop_id = body_json["shop_id"]
-        .as_str()
-        .ok_or_status_4001()?
-        .parse::<i32>()
-        .ok_or_status_4001()?;
+    let shop_id = body_json["shop_id"].as_i32().ok_or_status_4001()?;
     let food_vec = body_json["food_vec"].as_array().ok_or_status_4001()?;
-
+    
     let conn = &mut get_mysql_connection();
 
     let new_order = NewOrder {
@@ -50,18 +46,10 @@ pub fn add_order(request: &Request) -> juri::Result<Response> {
         .ok_or_status_4001()?;
 
     for food_data in food_vec.iter() {
-        let food_id = food_data["id"]
-            .as_str()
-            .ok_or_status_4001()?
-            .parse::<i32>()
-            .ok_or_status_4001()?;
+        let food_id = food_data["id"].as_i32().ok_or_status_4001()?;
         let food_title = food_data["title"].as_str().ok_or_status_4001()?.to_string();
         let food_value = food_data["value"].as_str().ok_or_status_4001()?.to_string();
-        let count = food_data["count"]
-            .as_str()
-            .ok_or_status_4001()?
-            .parse::<i32>()
-            .ok_or_status_4001()?;
+        let count = food_data["count"].as_i32().ok_or_status_4001()?;
         let new_order_food = NewOrderFood {
             order_id: new_order.id,
             food_id,

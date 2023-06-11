@@ -1,10 +1,43 @@
+use crate::{model::FoodModel, api::user::{NewOrder, NewOrderFood, new_shop_order_api}};
 use leptos::*;
-
-use crate::model::FoodModel;
+use leptos_router::use_query_map;
+use melt_ui::*;
 
 #[component]
 pub fn ShopCart(cx: Scope) -> impl IntoView {
     let cart = use_shop_cart(cx);
+    let shop_id = use_query_map(cx)
+        .get()
+        .get("shop_id")
+        .expect("shop_id fond")
+        .parse::<i32>()
+        .expect("shop_id i32");
+    
+    let add_order = move |_| {
+        let food_vec = cart.get();
+        if !food_vec.is_empty() {
+            let food_vec = food_vec.iter().map(|v| {
+                let count = v.count;
+                let FoodModel { id, title, value } = v.data.clone();
+                NewOrderFood {
+                    id,
+                    title,
+                    value,
+                    count
+                }
+            }).collect();
+            let new_order = NewOrder {
+                shop_id,
+                food_vec
+            };
+
+            new_shop_order_api(new_order, move |data| {
+                if data.is_ok() {
+                    cart.set(vec![]);
+                }
+            })
+        }
+    };
 
     view! {cx,
         <div class="fixed bottom-60px left-0 right-0" style="background: #fff">
@@ -28,6 +61,19 @@ pub fn ShopCart(cx: Scope) -> impl IntoView {
                     }
                 }
             />
+            {
+                move || {
+                    if cart.get().is_empty() {
+                        None
+                    } else {
+                        view! {cx,
+                            <Button style="width: calc(100% - 16px); margin: 8px;" on:click=add_order>
+                                "提交订单"
+                            </Button>
+                        }.into()
+                    }
+                }
+            }
         </div>
     }
 }
