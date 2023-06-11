@@ -17,7 +17,7 @@ use serde_json::{json, Value};
 
 #[handler]
 pub fn get_menu_food(request: &Request) -> juri::Result<Response> {
-    let user = get_user_info(request.header("token"))?;
+    let _ = get_user_info(request.header("token"))?;
     let menu_id: i32 = request
         .query("menu_id")
         .ok_or_status_4001()?
@@ -25,13 +25,8 @@ pub fn get_menu_food(request: &Request) -> juri::Result<Response> {
         .ok_or_status_4001()?;
 
     let conn = &mut get_mysql_connection();
-    let shop: Shop = shop::table
-        .filter(shop::user_id.eq(user.id))
-        .first(conn)
-        .ok_or_status_4001()?;
 
     let shop_menu: ShopMenu = shop_menu::table
-        .filter(shop_menu::shop_id.eq(shop.id))
         .filter(shop_menu::id.eq(menu_id))
         .first(conn)
         .ok_or_status_4001()?;
