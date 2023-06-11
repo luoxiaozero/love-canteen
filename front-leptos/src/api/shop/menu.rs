@@ -3,9 +3,10 @@ use crate::model::ShopMenuModel;
 use leptos::spawn_local;
 use serde::{Deserialize, Serialize};
 
-pub fn get_shop_menu_api(callback: impl Fn(Result<Vec<ShopMenuModel>, String>) -> () + 'static) {
+pub fn get_shop_menu_api(shop_id: i32, callback: impl Fn(Result<Vec<ShopMenuModel>, String>) -> () + 'static) {
     spawn_local(async move {
-        let res = get::<_, Vec<_>, String>("/api/shop/menu", None).await;
+        let query = [("shop_id", shop_id.to_string())].to_vec();
+        let res = get::<_, Vec<_>, String>("/api/shop/menu", Some(query)).await;
         if res.code != 2000 {
             callback(Err(res.reason));
             return;

@@ -19,11 +19,6 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         .expect("shop_id i32");
     let is_self_shop = create_rw_signal(cx, false);
 
-    is_self_shop_api(shop_id, move |is_self| {
-        if let Ok(is_self) = is_self {
-            is_self_shop.set(is_self);
-        }
-    });
     let default_shop_id = create_rw_signal(cx, DefaultShopId::get());
     let right_text = create_rw_signal(cx, "");
     create_effect(cx, move |_| {
@@ -49,9 +44,15 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
 
     let selected_menu_id = create_rw_signal::<i32>(cx, 1);
     let menu_list = create_rw_signal::<Vec<ShopMenuModel>>(cx, vec![]);
-    get_shop_menu_api(move |list| {
-        if let Ok(list) = list {
-            menu_list.set(list);
+
+    is_self_shop_api(shop_id, move |is_self| {
+        if let Ok(is_self) = is_self {
+            is_self_shop.set(is_self);
+            get_shop_menu_api(shop_id, move |list| {
+                if let Ok(list) = list {
+                    menu_list.set(list);
+                }
+            });
         }
     });
 

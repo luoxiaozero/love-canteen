@@ -2,9 +2,9 @@ use crate::database::models::NewShopMenuLinkFood;
 use crate::utils::user::get_user_info;
 use crate::{
     database::{
-        models::{Food, NewFood, Shop, ShopMenu},
+        models::{Food, NewFood, ShopMenu},
         mysql::get_mysql_connection,
-        schema::{food, shop, shop_menu, shop_menu_link_food},
+        schema::{food, shop_menu, shop_menu_link_food},
     },
     utils::{
         ext::{OptionResponseExt, ResulResponseExt},
