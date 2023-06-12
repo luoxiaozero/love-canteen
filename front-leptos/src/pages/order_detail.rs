@@ -5,12 +5,16 @@ use leptos_router::use_query_map;
 
 #[component]
 pub fn OrderDetail(cx: Scope) -> impl IntoView {
-    let order_id = use_query_map(cx)
-        .get()
+    let query_map = use_query_map(cx).get();
+    let order_id = query_map
         .get("order_id")
         .expect("order_id fond")
         .parse::<i32>()
         .expect("order_id i32");
+    let is_shop = match query_map.get("is_shop") {
+        Some(v) => v.parse::<bool>().unwrap_or_default(),
+        None => false,
+    };
     let order = create_rw_signal(cx, None);
     get_order_detail_api(order_id, move |data| {
         if let Ok(data) = data {
@@ -25,9 +29,21 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
                     if let Some(order) = order.get() {
                         view! { cx,
                             <div class="p-3">
-                                { order_status_to_text(order.status, false) }
+                                { order_status_to_text(order.status, is_shop) }
                             </div>
                             <div class="bg-white mx-1 mb-2 b-rd">
+                                {
+                                    if is_shop {
+                                        view! { cx,
+                                            <div class="py-3 px-4">
+                                                "客户："
+                                                { order.user_id }
+                                            </div>
+                                        }.into()
+                                    } else {
+                                        None
+                                    }
+                                }
                                 <div class="py-3 px-4">
                                     "下单时间："
                                     { order.create_time }

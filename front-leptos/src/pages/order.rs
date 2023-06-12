@@ -37,7 +37,7 @@ pub fn Order(cx: Scope) -> impl IntoView {
                     let order_id = order.id;
                     let goto_order_detail = move |_| {
                         let navigate = use_navigate(cx);
-                        _ = navigate(&format!("/order/detail?order_id={order_id}"), Default::default());
+                        _ = navigate(&format!("/order/detail?order_id={order_id}&is_shop={}", is_shop.get()), Default::default());
                     };
                     let status = store_value(cx, order.status);
                     view! { cx,

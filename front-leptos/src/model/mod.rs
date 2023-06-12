@@ -29,6 +29,7 @@ pub struct SimpleOrderModel {
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct OrderModel {
     pub id: i32,
+    pub user_id: i32,
     pub shop_id: i32,
     pub status: String,
     pub create_time: String,

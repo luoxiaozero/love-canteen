@@ -125,6 +125,7 @@ pub fn get_order_detail(request: &Request) -> juri::Result<Response> {
         .collect();
     let data = json!({
         "id": order_data.id,
+        "user_id": order_data.user_id,
         "shop_id": order_data.shop_id,
         "status": order_data.status,
         "create_time": order_data.create_time.format("%Y-%m-%d %H:%M:%S").to_string(),
