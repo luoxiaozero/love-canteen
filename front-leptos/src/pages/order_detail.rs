@@ -1,7 +1,7 @@
+use super::order::order_status_to_text;
 use crate::{api::user::get_order_detail_api, components::TopNav};
 use leptos::*;
 use leptos_router::use_query_map;
-use super::order::order_status_to_text;
 
 #[component]
 pub fn OrderDetail(cx: Scope) -> impl IntoView {
@@ -25,7 +25,7 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
                     if let Some(order) = order.get() {
                         view! { cx,
                             <div class="p-3">
-                                { order_status_to_text(order.status) }
+                                { order_status_to_text(order.status, false) }
                             </div>
                             <div class="bg-white mx-1 mb-2 b-rd">
                                 <div class="py-3 px-4">
@@ -49,7 +49,7 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
                         }
                     }
                     key=|food| food.id
-                    view=move |cx, food| view! { cx, 
+                    view=move |cx, food| view! { cx,
                         <div class="py-3 px-4" style="border-bottom: 1px solid #f2f2f2;">
                             <div>{ food.title }</div>
                             <div>
@@ -57,7 +57,7 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
                             </div>
                             <div>"x"{ food.count }</div>
                         </div>
-                    } 
+                    }
                 />
             </div>
         </div>

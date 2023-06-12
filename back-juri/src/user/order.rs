@@ -93,7 +93,7 @@ pub fn get_order(request: &Request) -> juri::Result<Response> {
 
 #[handler]
 pub fn get_order_detail(request: &Request) -> juri::Result<Response> {
-    let user = get_user_info(request.header("token"))?;
+    let _user = get_user_info(request.header("token"))?;
     let order_id: i32 = request
         .query("order_id")
         .ok_or_status_4001()?
@@ -102,7 +102,7 @@ pub fn get_order_detail(request: &Request) -> juri::Result<Response> {
 
     let conn = &mut get_mysql_connection();
     let order_data: Order = order::table
-        .filter(order::user_id.eq(user.id))
+        // .filter(order::user_id.eq(user.id))
         .filter(order::id.eq(order_id))
         .first(conn)
         .ok_or_status_4001()?;

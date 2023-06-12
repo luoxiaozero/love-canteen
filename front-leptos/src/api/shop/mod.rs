@@ -5,7 +5,7 @@ pub use food::*;
 pub use menu::*;
 
 use super::net::get;
-use crate::model::ShopModel;
+use crate::model::{ShopModel, SimpleOrderModel};
 use leptos::spawn_local;
 
 pub fn get_shop_vec_api(callback: impl Fn(Result<Vec<ShopModel>, String>) -> () + 'static) {
@@ -36,5 +36,18 @@ pub fn is_self_shop_api(shop_id: i32, callback: impl Fn(Result<bool, String>) ->
             return;
         };
         callback(Ok(data));
+    });
+}
+
+pub fn get_shop_order_api(
+    callback: impl Fn(Result<Option<Vec<SimpleOrderModel>>, String>) -> () + 'static,
+) {
+    spawn_local(async move {
+        let res = get::<_, Vec<_>, String>("/api/shop/order", None).await;
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
+        }
+        callback(Ok(res.data));
     });
 }

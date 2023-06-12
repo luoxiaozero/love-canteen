@@ -1,5 +1,6 @@
 mod food;
 mod menu;
+mod order;
 
 use crate::utils::ext::OptionResponseExt;
 use crate::utils::user::get_user_info;
@@ -26,6 +27,7 @@ pub fn router() -> Router {
     router.at("/shop/menu/add").post(menu::add_menu);
     router.at("/shop/menu/food").get(food::get_menu_food);
     router.at("/shop/food/add").post(food::add_food);
+    router.at("/shop/order").get(order::get_shop_order);
     router
 }
 
