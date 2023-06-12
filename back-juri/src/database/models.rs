@@ -89,6 +89,13 @@ pub struct NewOrder {
     pub reserve_end_time: chrono::NaiveDateTime,
 }
 
+#[derive(AsChangeset)]
+#[diesel(table_name=super::schema::order)]
+pub struct AcceptOrder {
+    pub status: String,
+    pub reason: String,
+}
+
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = super::schema::order)]
 pub struct Order {
