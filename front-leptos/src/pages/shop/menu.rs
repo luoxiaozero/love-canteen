@@ -42,7 +42,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         default_shop_id.set(DefaultShopId::get());
     });
 
-    let selected_menu_id = create_rw_signal::<i32>(cx, 1);
+    let selected_menu_id = create_rw_signal::<i32>(cx, -1);
     let menu_list = create_rw_signal::<Vec<ShopMenuModel>>(cx, vec![]);
 
     is_self_shop_api(shop_id, move |is_self| {
@@ -59,6 +59,9 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
     let food_vec = create_rw_signal::<Vec<FoodModel>>(cx, vec![]);
     create_effect(cx, move |_| {
         let menu_id = selected_menu_id.get();
+        if menu_id == -1 {
+            return;
+        }
         get_food_vec_api(menu_id, move |food_vec_data| {
             if let Ok(food_vec_data) = food_vec_data {
                 food_vec.set(food_vec_data);
@@ -67,9 +70,13 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
     });
 
     let new_food = move |_| {
+        let menu_id = selected_menu_id.get();
+        if menu_id == -1 {
+            return;
+        }
         let navigate = use_navigate(cx);
         _ = navigate(
-            &format!("/shop/food/add?menu_id={}", selected_menu_id.get()),
+            &format!("/shop/food/add?menu_id={}", menu_id),
             Default::default(),
         );
     };
