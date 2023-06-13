@@ -52,7 +52,7 @@ pub fn get_shop_order(request: &Request) -> juri::Result<Response> {
 }
 
 #[handler]
-fn accept_order(request: &Request) -> juri::Result<Response> {
+pub fn accept_order(request: &Request) -> juri::Result<Response> {
     let _ = get_user_info(request.header("token"))?;
     let body_json = request.json_value().ok_or_status_4001()?;
     let order_id = body_json["order_id"].as_i32().ok_or_status_4001()?;

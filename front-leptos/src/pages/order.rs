@@ -61,6 +61,12 @@ pub fn order_status_to_text(status: String, is_shop: bool) -> String {
         } else {
             "等待商家接单"
         })
+    } else if status == "accept" {
+        String::from(if is_shop {
+            "已接单"
+        } else {
+            "商家已接单"
+        })
     } else {
         String::new()
     }

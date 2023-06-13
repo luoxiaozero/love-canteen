@@ -1,7 +1,14 @@
 use super::order::order_status_to_text;
-use crate::{api::user::get_order_detail_api, components::TopNav};
+use crate::{
+    api::{
+        shop::{accept_order_api, AcceptOrderData},
+        user::get_order_detail_api,
+    },
+    components::TopNav,
+};
 use leptos::*;
 use leptos_router::use_query_map;
+use melt_ui::Button;
 
 #[component]
 pub fn OrderDetail(cx: Scope) -> impl IntoView {
@@ -21,6 +28,23 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
             order.set(Some(data))
         }
     });
+
+    let accept_order = move |_| {
+        let data = AcceptOrderData {
+            order_id,
+            accept: true,
+            reason: None,
+        };
+        accept_order_api(data, move |data| {
+            if data.is_ok() {
+                get_order_detail_api(order_id, move |data| {
+                    if let Ok(data) = data {
+                        order.set(Some(data))
+                    }
+                });
+            }
+        });
+    };
     view! { cx,
         <TopNav title="订单详情" />
         <div class="h-screen pt-46px box-border" style="background: #eff2f5">
@@ -29,8 +53,21 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
                     if let Some(order) = order.get() {
                         view! { cx,
                             <div class="p-3">
-                                { order_status_to_text(order.status, is_shop) }
+                                { order_status_to_text(order.status.clone(), is_shop) }
                             </div>
+                            {
+                                if order.status == "wait" {
+                                    view! { cx,
+                                        <div style="padding: 6px">
+                                            <Button style="width: 100%" on:click=accept_order>
+                                                "接单"
+                                            </Button>
+                                        </div>
+                                    }.into()
+                                } else {
+                                    None
+                                }
+                            }
                             <div class="bg-white mx-1 mb-2 b-rd">
                                 {
                                     if is_shop {

@@ -4,9 +4,10 @@ mod menu;
 pub use food::*;
 pub use menu::*;
 
-use super::net::get;
+use super::net::{get, post};
 use crate::model::{ShopModel, SimpleOrderModel};
 use leptos::spawn_local;
+use serde::{Deserialize, Serialize};
 
 pub fn get_shop_vec_api(callback: impl Fn(Result<Vec<ShopModel>, String>) -> () + 'static) {
     spawn_local(async move {
@@ -49,5 +50,26 @@ pub fn get_shop_order_api(
             return;
         }
         callback(Ok(res.data));
+    });
+}
+
+#[derive(Deserialize, Serialize, PartialEq, Clone)]
+pub struct AcceptOrderData {
+    pub order_id: i32,
+    pub accept: bool,
+    pub reason: Option<String>,
+}
+
+pub fn accept_order_api(
+    data: AcceptOrderData,
+    callback: impl Fn(Result<(), String>) -> () + 'static,
+) {
+    spawn_local(async move {
+        let res = post::<()>("/api/shop/order/accept", &data).await;
+        if res.code != 2000 {
+            callback(Err(res.reason));
+            return;
+        }
+        callback(Ok(()));
     });
 }

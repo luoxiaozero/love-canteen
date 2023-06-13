@@ -28,6 +28,7 @@ pub fn router() -> Router {
     router.at("/shop/menu/food").get(food::get_menu_food);
     router.at("/shop/food/add").post(food::add_food);
     router.at("/shop/order").get(order::get_shop_order);
+    router.at("/shop/order/accept").post(order::accept_order);
     router
 }
 
