@@ -4,6 +4,7 @@ use crate::store::*;
 use leptos::*;
 use leptos_router::use_navigate;
 use melt_ui::*;
+use sha3::{Digest, Sha3_256};
 
 #[component]
 pub fn Login(cx: Scope) -> impl IntoView {
@@ -30,6 +31,11 @@ pub fn Login(cx: Scope) -> impl IntoView {
             error_text.set(String::from("密码不能为空"));
             return;
         }
+        let mut hasher = Sha3_256::new();
+        hasher.update(password);
+        let hex_vec = hasher.finalize().to_vec();
+        let password = hex::encode(hex_vec);
+
         login_api(LoginData { account, password }, move |v| {
             match v {
                 Ok(data) => {
