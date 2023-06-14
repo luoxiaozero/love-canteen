@@ -8,6 +8,13 @@ use std::time::Duration;
 
 #[component]
 pub fn AddFood(cx: Scope) -> impl IntoView {
+    let shop_id = use_query_map(cx)
+        .get()
+        .get("shop_id")
+        .expect("shop_id fond")
+        .parse::<i32>()
+        .expect("shop_id i32");
+
     let query_map = use_query_map(cx);
 
     let title = create_rw_signal(cx, String::new());
@@ -35,7 +42,10 @@ pub fn AddFood(cx: Scope) -> impl IntoView {
                     };
                 } else {
                     let navigate = use_navigate(cx);
-                    _ = navigate("/shop/menu", Default::default());
+                    _ = navigate(
+                        &format!("/shop/menu?shop_id={}", shop_id),
+                        Default::default(),
+                    );
                     options = ToastOptions {
                         message: "添加成功".to_string(),
                         duration: Duration::from_millis(2000),

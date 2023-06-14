@@ -78,7 +78,7 @@ pub fn ShopMenu(cx: Scope) -> impl IntoView {
         }
         let navigate = use_navigate(cx);
         _ = navigate(
-            &format!("/shop/food/add?menu_id={}", menu_id),
+            &format!("/shop/food/add?menu_id={}&shop_id={}", menu_id, shop_id),
             Default::default(),
         );
     };
