@@ -3,8 +3,9 @@ use crate::components::use_shop_cart;
 use crate::store::*;
 use leptos::*;
 use leptos_router::use_navigate;
-use melt_ui::*;
+use melt_ui::{mobile::*, *};
 use sha3::{Digest, Sha3_256};
+use std::time::Duration;
 
 #[component]
 pub fn Login(cx: Scope) -> impl IntoView {
@@ -44,6 +45,13 @@ pub fn Login(cx: Scope) -> impl IntoView {
                     let cart = use_shop_cart(cx);
                     cart.set(vec![]);
                     _ = navigate("/", Default::default());
+                    show_toast(
+                        cx,
+                        ToastOptions {
+                            message: "登陆成功".to_string(),
+                            duration: Duration::from_millis(2000),
+                        },
+                    );
                 }
                 Err(err) => {
                     error_text.set(err);

@@ -17,7 +17,7 @@ leptos_icons = { git = "https://github.com/luoxiaozero/leptos-icons.git", rev = 
     "AiBarsOutlined",
     "AiGroupOutlined",
 ] }
-melt-ui = { git = "https://github.com/luoxiaozero/melt-ui.git", rev = "95a2586" }
+melt-ui = { git = "https://github.com/luoxiaozero/melt-ui.git", rev = "b50acd1" }
 serde = "1.0.163"
 gloo-net = "0.2.6"
 gloo-storage = "0.2.2"

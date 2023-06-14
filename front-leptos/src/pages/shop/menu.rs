@@ -6,7 +6,9 @@ use crate::{
 };
 use leptos::*;
 use leptos_router::{use_navigate, use_query_map};
+use melt_ui::mobile::*;
 use melt_ui::*;
+use std::time::Duration;
 
 #[component]
 pub fn ShopMenu(cx: Scope) -> impl IntoView {
@@ -189,12 +191,26 @@ pub fn AddMenu(cx: Scope, menu_vec: RwSignal<Vec<ShopMenuModel>>) -> impl IntoVi
                 title: new_menu_title.get_untracked(),
             },
             move |shop_menu| {
-                if let Ok(shop_menu) = shop_menu {
-                    menu_vec.update(|value| {
-                        value.push(shop_menu);
-                    });
+                let options;
+                match shop_menu {
+                    Ok(shop_menu) => {
+                        menu_vec.update(|value| {
+                            value.push(shop_menu);
+                        });
+                        is_show_new_menu.set(false);
+                        options = ToastOptions {
+                            message: "添加成功".to_string(),
+                            duration: Duration::from_millis(2000),
+                        };
+                    }
+                    Err(err) => {
+                        options = ToastOptions {
+                            message: err,
+                            duration: Duration::from_millis(2000),
+                        };
+                    }
                 }
-                is_show_new_menu.set(false);
+                show_toast(cx, options);
             },
         );
     };

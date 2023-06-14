@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use super::order::order_status_to_text;
 use crate::{
     api::{
@@ -8,6 +10,7 @@ use crate::{
 };
 use leptos::*;
 use leptos_router::use_query_map;
+use melt_ui::mobile::*;
 use melt_ui::Button;
 
 #[component]
@@ -36,13 +39,24 @@ pub fn OrderDetail(cx: Scope) -> impl IntoView {
             reason: None,
         };
         accept_order_api(data, move |data| {
-            if data.is_ok() {
+            let options;
+            if let Err(err) = data {
+                options = ToastOptions {
+                    message: err,
+                    duration: Duration::from_millis(2000),
+                };
+            } else {
                 get_order_detail_api(order_id, move |data| {
                     if let Ok(data) = data {
                         order.set(Some(data))
                     }
                 });
+                options = ToastOptions {
+                    message: "接单成功".to_string(),
+                    duration: Duration::from_millis(2000),
+                };
             }
+            show_toast(cx, options);
         });
     };
     view! { cx,

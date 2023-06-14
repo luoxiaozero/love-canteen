@@ -1,7 +1,12 @@
-use crate::{model::FoodModel, api::user::{NewOrder, NewOrderFood, new_shop_order_api}};
+use crate::{
+    api::user::{new_shop_order_api, NewOrder, NewOrderFood},
+    model::FoodModel,
+};
 use leptos::*;
 use leptos_router::use_query_map;
+use melt_ui::mobile::*;
 use melt_ui::*;
+use std::time::Duration;
 
 #[component]
 pub fn ShopCart(cx: Scope) -> impl IntoView {
@@ -12,29 +17,40 @@ pub fn ShopCart(cx: Scope) -> impl IntoView {
         .expect("shop_id fond")
         .parse::<i32>()
         .expect("shop_id i32");
-    
+
     let add_order = move |_| {
         let food_vec = cart.get();
         if !food_vec.is_empty() {
-            let food_vec = food_vec.iter().map(|v| {
-                let count = v.count;
-                let FoodModel { id, title, value } = v.data.clone();
-                NewOrderFood {
-                    id,
-                    title,
-                    value,
-                    count
-                }
-            }).collect();
-            let new_order = NewOrder {
-                shop_id,
-                food_vec
-            };
+            let food_vec = food_vec
+                .iter()
+                .map(|v| {
+                    let count = v.count;
+                    let FoodModel { id, title, value } = v.data.clone();
+                    NewOrderFood {
+                        id,
+                        title,
+                        value,
+                        count,
+                    }
+                })
+                .collect();
+            let new_order = NewOrder { shop_id, food_vec };
 
             new_shop_order_api(new_order, move |data| {
-                if data.is_ok() {
+                let options;
+                if let Err(err) = data {
+                    options = ToastOptions {
+                        message: err,
+                        duration: Duration::from_millis(2000),
+                    };
+                } else {
                     cart.set(vec![]);
+                    options = ToastOptions {
+                        message: "提交成功".to_string(),
+                        duration: Duration::from_millis(2000),
+                    };
                 }
+                show_toast(cx, options)
             })
         }
     };
