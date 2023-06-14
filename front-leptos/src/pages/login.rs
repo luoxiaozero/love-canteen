@@ -44,6 +44,7 @@ pub fn Login(cx: Scope) -> impl IntoView {
                     Token::set(data.token);
                     let cart = use_shop_cart(cx);
                     cart.set(vec![]);
+                    DefaultShopId::set(0);
                     _ = navigate("/", Default::default());
                     show_toast(
                         cx,
